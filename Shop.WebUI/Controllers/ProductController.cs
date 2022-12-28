@@ -20,7 +20,7 @@ public class ProductController : Controller
         return View(ProductList);
     }
 
-    //...............................................
+    //.......................Create........................
     //Get
     [HttpGet]
     public IActionResult Create()
@@ -45,7 +45,7 @@ public class ProductController : Controller
         }
         return View(product);
     }
-    //---------------------------------------------------------------
+    //----------------------------Update-----------------------------------
     //Get
     [HttpGet]
     public IActionResult Edit(int? id)
@@ -81,7 +81,7 @@ public class ProductController : Controller
         }
         return View(product);
     }
-    //-----------------------------------------------------
+    //---------------------------Delete--------------------------
     //Get
     [HttpGet]
     public IActionResult Delete(int? id)

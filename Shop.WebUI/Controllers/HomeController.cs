@@ -1,32 +1,81 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Shop.DAL.DbContexts;
+using Shop.Model.Products;
 using Shop.WebUI.Models;
 using System.Diagnostics;
 
-namespace Shop.WebUI.Controllers
+namespace Shop.WebUI.Controllers;
+
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ShopDbContext _shopDbContext;
+
+    public HomeController(ShopDbContext shopDbContext)
     {
-        private readonly ILogger<HomeController> _logger;
+        _shopDbContext = shopDbContext;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    //private readonly ILogger<HomeController> _logger;
+
+    //public HomeController(ILogger<HomeController> logger)
+    //{
+    //    _logger = logger;
+    //}
+
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    //------------------------------------
+
+    [HttpGet]
+    public IActionResult Search(string? name)
+    {
+        if (name == null)
         {
-            _logger = logger;
+            return NotFound();
         }
 
-        public IActionResult Index()
+        var product = _shopDbContext.Products.Find(name);
+        if (product == null)
         {
-            return View();
+            return NotFound();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        return View(product);
+    }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+    [HttpPost]
+    public IActionResult Search(Product product)
+    {
+        IQueryable<Product> products = _shopDbContext.Products.AsQueryable();
+        if (!string.IsNullOrEmpty(product.Name))
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            products = products.Where(t => t.Name.Contains(product.Name));
         }
+        List<Product> result = products.Select(c => new Product
+        {
+            Name = c.Name,
+            Quantity = c.Quantity
+        }).ToList();
+
+        return View(result);
+        //return new List<Product>
+        //{
+        //    Result = new List<Product>(result) { }
+        //};
+    }
+
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
