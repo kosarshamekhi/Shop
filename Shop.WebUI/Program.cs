@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.DAL.DbContexts;
+using Shop.DAL.Framework;
+using Shop.DAL.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ShopDbContext>(c => c.UseSqlServer("Server=.; Initial Catalog=Shop; Integrated Security = SSPI; TrustServerCertificate=True"));
+
+//builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 var app = builder.Build();

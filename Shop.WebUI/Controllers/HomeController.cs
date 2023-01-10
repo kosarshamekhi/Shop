@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.DAL.DbContexts;
+using Shop.Model;
 using Shop.Model.Products;
-using Shop.WebUI.Models;
 using System.Diagnostics;
 
 namespace Shop.WebUI.Controllers;
@@ -42,7 +42,7 @@ public class HomeController : Controller
             return NotFound();
         }
 
-        var product = _shopDbContext.Products.Find(name);
+        var product = _shopDbContext.Products.FirstOrDefault(u=>u.Name == name);
         if (product == null)
         {
             return NotFound();

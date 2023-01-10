@@ -1,34 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop.DAL.DbContexts;
+using Shop.DAL.Framework;
+using Shop.DAL.Products;
 using Shop.Model.Products;
 
 namespace Shop.WebUI.Controllers;
 
 public class ProductController : Controller
 {
-    private readonly ShopDbContext _shopDbContext;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProductController(ShopDbContext shopDbContext)
+    public ProductController(IUnitOfWork unitOfWork)
     {
-        _shopDbContext = shopDbContext;
+        _unitOfWork = unitOfWork;
     }
 
-    //...........................................
+    //.......................Read........................
+
     public IActionResult Index()
     {
-        IEnumerable<Product> ProductList = _shopDbContext.Products.ToList();
+        IEnumerable<Product> ProductList = _unitOfWork.Product.GetAll();
         return View(ProductList);
     }
 
     //.......................Create........................
-    //Get
     [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
-
-    //Post
     [HttpPost]
     public IActionResult Create(Product product)
     {
@@ -39,32 +38,30 @@ public class ProductController : Controller
 
         if(ModelState.IsValid)
         {
-            _shopDbContext.Add(product);
-            _shopDbContext.SaveChanges();
+            _unitOfWork.Product.Add(product);
+            TempData["success"] = "محصول جدید با موفقیت اضافه شد";
             return RedirectToAction("Index");
         }
         return View(product);
     }
-    //----------------------------Update-----------------------------------
-    //Get
+
+    //.......................Update........................
     [HttpGet]
     public IActionResult Edit(int? id)
     {
-        if(id == null || id == 0)
+        if (id == null || id == 0)
         {
             return NotFound();
         }
 
-        var product = _shopDbContext.Products.Find(id);
-        if(product == null)
+        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+        if (product == null)
         {
             return NotFound();
         }
 
         return View(product);
     }
-
-    //Post
     [HttpPost]
     public IActionResult Edit(Product product)
     {
@@ -75,14 +72,14 @@ public class ProductController : Controller
 
         if (ModelState.IsValid)
         {
-            _shopDbContext.Update(product);
-            _shopDbContext.SaveChanges();
+            _unitOfWork.Product.Update(product);
+            TempData["success"] = "محصول با موفقیت ویرایش شد";
             return RedirectToAction("Index");
         }
         return View(product);
     }
-    //---------------------------Delete--------------------------
-    //Get
+
+    //.......................Delete........................
     [HttpGet]
     public IActionResult Delete(int? id)
     {
@@ -91,7 +88,7 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        var product = _shopDbContext.Products.Find(id);
+        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
         if (product == null)
         {
             return NotFound();
@@ -99,14 +96,12 @@ public class ProductController : Controller
 
         return View(product);
     }
-
-    //Post
     [HttpPost]
     public IActionResult DeletePost(int? id)
     {
-        var product = _shopDbContext.Products.Find(id);
-        _shopDbContext.Remove(product);
-        _shopDbContext.SaveChanges();
+        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+        _unitOfWork.Product.Remove(product);
+        TempData["success"] = "محصول با موفقیت حذف شد";
         return RedirectToAction("Index");
     }
 }

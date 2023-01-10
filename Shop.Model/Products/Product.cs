@@ -1,5 +1,4 @@
-﻿using Shop.Model.Units;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Shop.Model.Products;
