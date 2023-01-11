@@ -10,8 +10,6 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ShopDbContext>(c => c.UseSqlServer("Server=.; Initial Catalog=Shop; Integrated Security = SSPI; TrustServerCertificate=True"));
 
-//builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 

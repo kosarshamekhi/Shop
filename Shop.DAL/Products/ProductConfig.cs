@@ -1,13 +1,10 @@
-﻿using Azure;
-using Azure.Messaging;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shop.Model.Products;
 
 namespace Shop.DAL.Products;
 
-public class ProductConfig : IEntityTypeConfiguration<Product
-    >
+public class ProductConfig : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {

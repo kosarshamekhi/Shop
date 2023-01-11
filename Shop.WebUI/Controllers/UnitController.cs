@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shop.DAL.Framework;
-using Shop.Model.Products;
+using Shop.Model.Units;
 
 namespace Shop.WebUI.Controllers;
 
-public class ProductController : Controller
+public class UnitController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
 
-    public ProductController(IUnitOfWork unitOfWork)
+    public UnitController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
     }
@@ -16,8 +16,8 @@ public class ProductController : Controller
     //.......................Read........................
     public IActionResult Index()
     {
-        IEnumerable<Product> ProductList = _unitOfWork.Product.GetAll();
-        return View(ProductList);
+        IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
+        return View(UnitList);
     }
 
     //.......................Create........................
@@ -27,20 +27,15 @@ public class ProductController : Controller
         return View();
     }
     [HttpPost]
-    public IActionResult Create(Product product)
+    public IActionResult Create(Unit unit)
     {
-        if(product.Name == product.Quantity.ToString())
+        if (ModelState.IsValid)
         {
-            ModelState.AddModelError("Name", "مقدار فیلد های نام و تعداد نمیتواند برابر باشد");
-        }   
-
-        if(ModelState.IsValid)
-        {
-            _unitOfWork.Product.Add(product);
+            _unitOfWork.Unit.Add(unit);
             TempData["success"] = "محصول جدید با موفقیت اضافه شد";
             return RedirectToAction("Index");
         }
-        return View(product);
+        return View(unit);
     }
 
     //.......................Update........................
@@ -52,29 +47,24 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-        if (product == null)
+        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
+        if (unit == null)
         {
             return NotFound();
         }
 
-        return View(product);
+        return View(unit);
     }
     [HttpPost]
-    public IActionResult Edit(Product product)
+    public IActionResult Edit(Unit unit)
     {
-        if (product.Name == product.Quantity.ToString())
-        {
-            ModelState.AddModelError("Name", "مقدار فیلد های نام و تعداد نمیتواند برابر باشد");
-        }
-
         if (ModelState.IsValid)
         {
-            _unitOfWork.Product.Update(product);
+            _unitOfWork.Unit.Update(unit);
             TempData["success"] = "محصول با موفقیت ویرایش شد";
             return RedirectToAction("Index");
         }
-        return View(product);
+        return View(unit);
     }
 
     //.......................Delete........................
@@ -86,19 +76,19 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-        if (product == null)
+        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
+        if (unit == null)
         {
             return NotFound();
         }
 
-        return View(product);
+        return View(unit);
     }
     [HttpPost]
     public IActionResult DeletePost(int? id)
     {
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-        _unitOfWork.Product.Remove(product);
+        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
+        _unitOfWork.Unit.Remove(unit);
         TempData["success"] = "محصول با موفقیت حذف شد";
         return RedirectToAction("Index");
     }

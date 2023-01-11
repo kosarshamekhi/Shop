@@ -1,9 +1,7 @@
-﻿using Shop.Model.Products;
+﻿namespace Shop.Model.Units;
 
-namespace Shop.Model.Units;
-
-public enum Unit
+public class Unit
 {
-    kg = 1,
-    Liter
+    public int Id { get; set; }
+    public string Name { get; set; }   
 }

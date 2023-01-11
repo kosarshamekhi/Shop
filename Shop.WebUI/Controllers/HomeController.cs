@@ -50,7 +50,6 @@ public class HomeController : Controller
 
         return View(product);
     }
-
     [HttpPost]
     public IActionResult Search(Product product)
     {

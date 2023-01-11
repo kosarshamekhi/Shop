@@ -45,6 +45,24 @@ namespace Shop.DAL.Migrations
 
                     b.ToTable("Products");
                 });
+
+            modelBuilder.Entity("Shop.Model.Units.Unit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Units");
+                });
 #pragma warning restore 612, 618
         }
     }

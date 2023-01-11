@@ -16,6 +16,4 @@ public class Product
     [DisplayName("واحد شمارش محصول")]
     [Required(ErrorMessage = "واحد شمارش اجباریست")]
     public string Unit { get; set; }
-    //public Unit Unit { get; set; }
-    //public int UnitId { get; set; }
 }
