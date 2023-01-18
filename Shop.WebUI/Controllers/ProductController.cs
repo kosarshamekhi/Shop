@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop.DAL.Framework;
+using Shop.BLL.Products;
 using Shop.Model.Products;
 
 namespace Shop.WebUI.Controllers;
 
 public class ProductController : Controller
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ProductService _productService;
 
-    public ProductController(IUnitOfWork unitOfWork)
+    public ProductController(ProductService productService)
     {
-        _unitOfWork = unitOfWork;
+        _productService = productService;
     }
 
     //.......................Read........................
     public IActionResult Index()
     {
-        IEnumerable<Product> ProductList = _unitOfWork.Product.GetAll();
+        IEnumerable<Product> ProductList = _productService.GetAll();
         return View(ProductList);
     }
 
@@ -36,7 +36,7 @@ public class ProductController : Controller
 
         if(ModelState.IsValid)
         {
-            _unitOfWork.Product.Add(product);
+            _productService.Add(product);
             TempData["success"] = "محصول جدید با موفقیت اضافه شد";
             return RedirectToAction("Index");
         }
@@ -52,7 +52,7 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+        var product = _productService.GetFirstOrDefault(u => u.Id == id);
         if (product == null)
         {
             return NotFound();
@@ -70,7 +70,7 @@ public class ProductController : Controller
 
         if (ModelState.IsValid)
         {
-            _unitOfWork.Product.Update(product);
+            _productService.Update(product);
             TempData["success"] = "محصول با موفقیت ویرایش شد";
             return RedirectToAction("Index");
         }
@@ -86,7 +86,7 @@ public class ProductController : Controller
             return NotFound();
         }
 
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+        var product = _productService.GetFirstOrDefault(u => u.Id == id);
         if (product == null)
         {
             return NotFound();
@@ -97,8 +97,8 @@ public class ProductController : Controller
     [HttpPost]
     public IActionResult DeletePost(int? id)
     {
-        var product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-        _unitOfWork.Product.Remove(product);
+        var product = _productService.GetFirstOrDefault(u => u.Id == id);
+        _productService.Remove(product);
         TempData["success"] = "محصول با موفقیت حذف شد";
         return RedirectToAction("Index");
     }

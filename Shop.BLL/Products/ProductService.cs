@@ -2,17 +2,17 @@
 using Shop.Model.Products;
 using System.Linq.Expressions;
 
-namespace Shop.DAL.Products;
+namespace Shop.BLL.Products;
 
-public class ProductRepository : IProductRepository
+public class ProductService
 {
     private readonly ShopDbContext _shopDbContext;
 
-    public ProductRepository(ShopDbContext shopDbContext)
+    public ProductService(ShopDbContext shopDbContext)
     {
         _shopDbContext = shopDbContext;
     }
-     
+
     public void Add(Product product)
     {
         _shopDbContext.AddAsync(product);
@@ -31,7 +31,7 @@ public class ProductRepository : IProductRepository
         products = products.Where(filter);
         return products.FirstOrDefault();
     }
-    
+
     public void Remove(Product product)
     {
         _shopDbContext.Remove(product);

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Shop.Model\Shop.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Framework\" />
+  </ItemGroup>
+
 </Project>

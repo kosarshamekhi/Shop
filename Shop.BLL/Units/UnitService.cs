@@ -2,13 +2,13 @@
 using Shop.Model.Units;
 using System.Linq.Expressions;
 
-namespace Shop.DAL.Units;
+namespace Shop.BLL.Units;
 
-public class UnitRepository : IUnitRepository
+public class UnitService
 {
     private readonly ShopDbContext _shopDbContext;
 
-    public UnitRepository(ShopDbContext shopDbContext)
+    public UnitService(ShopDbContext shopDbContext)
     {
         _shopDbContext = shopDbContext;
     }

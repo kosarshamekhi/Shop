@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shop.DAL.Framework;
+using Shop.BLL.Units;
 using Shop.Model.Units;
 
 namespace Shop.WebUI.Controllers;
 
 public class UnitController : Controller
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly UnitService _unitService;
 
-    public UnitController(IUnitOfWork unitOfWork)
+    public UnitController(UnitService unitService)
     {
-        _unitOfWork = unitOfWork;
+        _unitService = unitService;
     }
 
     //.......................Read........................
     public IActionResult Index()
     {
-        IEnumerable<Unit> UnitList = _unitOfWork.Unit.GetAll();
+        IEnumerable<Unit> UnitList = _unitService.GetAll();
         return View(UnitList);
     }
 
@@ -31,7 +31,7 @@ public class UnitController : Controller
     {
         if (ModelState.IsValid)
         {
-            _unitOfWork.Unit.Add(unit);
+            _unitService.Add(unit);
             TempData["success"] = "محصول جدید با موفقیت اضافه شد";
             return RedirectToAction("Index");
         }
@@ -47,7 +47,7 @@ public class UnitController : Controller
             return NotFound();
         }
 
-        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
+        var unit = _unitService.GetFirstOrDefault(u => u.Id == id);
         if (unit == null)
         {
             return NotFound();
@@ -60,7 +60,7 @@ public class UnitController : Controller
     {
         if (ModelState.IsValid)
         {
-            _unitOfWork.Unit.Update(unit);
+            _unitService.Update(unit);
             TempData["success"] = "محصول با موفقیت ویرایش شد";
             return RedirectToAction("Index");
         }
@@ -76,7 +76,7 @@ public class UnitController : Controller
             return NotFound();
         }
 
-        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
+        var unit = _unitService.GetFirstOrDefault(u => u.Id == id);
         if (unit == null)
         {
             return NotFound();
@@ -87,8 +87,8 @@ public class UnitController : Controller
     [HttpPost]
     public IActionResult DeletePost(int? id)
     {
-        var unit = _unitOfWork.Unit.GetFirstOrDefault(u => u.Id == id);
-        _unitOfWork.Unit.Remove(unit);
+        var unit = _unitService.GetFirstOrDefault(u => u.Id == id);
+        _unitService.Remove(unit);
         TempData["success"] = "محصول با موفقیت حذف شد";
         return RedirectToAction("Index");
     }
